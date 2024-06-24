@@ -1,0 +1,367 @@
+-- Drop Tables
+
+DROP table Referees;
+DROP table Club;
+DROP table Game;
+DROP table Game_Time;
+DROP table Player;
+DROP table Player_Statistics;
+DROP table Player_History;
+DROP table Game_Location;
+DROP table Attendance;
+DROP table Possession_Time;
+DROP table PlayerStats_PerMatch;
+
+
+
+
+-- create table Referees
+CREATE TABLE Referees(
+    Referee_ID VARCHAR(2) PRIMARY KEY,
+    First_Name VARCHAR(15),
+    Age INT,
+    Total_Fouls_Given INT,
+    Total_Yellow_Cards_Given INT,
+    Total_Red_Cards_Given INT
+);
+
+INSERT INTO Referees VALUES('R1', 'Slavko', 44, 28, 6, 0);
+INSERT INTO Referees VALUES('R2', 'Daniele', 48, 57, 9, 0);
+INSERT INTO Referees VALUES('R3', 'Danny', 40, 17, 2, 0);
+INSERT INTO Referees VALUES('R4', 'Szymon', 42, 68, 10, 0);
+INSERT INTO Referees VALUES('R5', 'Antonio Miguel', 46, 48, 14, 1);
+
+
+-- create table Club
+CREATE TABLE Club (
+    Club_ID VARCHAR(3) PRIMARY KEY,
+    Club_Name VARCHAR(22),
+    Country VARCHAR(18),
+    League VARCHAR(19)
+);
+
+INSERT INTO Club VALUES('101', 'Inter Miami', 'United States', 'Major League Soccer');
+INSERT INTO Club VALUES('102', 'FC Barcelona', 'Spain', 'La Liga');
+INSERT INTO Club VALUES('103', 'S.L. Benfica', 'Portugal', 'Primeira Liga');
+INSERT INTO Club VALUES('104', 'Aston Villa', 'England', 'Premier League');
+INSERT INTO Club VALUES('105', 'Sevilla FC', 'Spain', 'La Liga');
+INSERT INTO Club VALUES('106', 'Atletico Madrid', 'Spain', 'La Liga');
+INSERT INTO Club VALUES('107', 'Manchester City', 'England', 'Premier League');
+INSERT INTO Club VALUES('108', 'Chelsea', 'England', 'Premier League');
+INSERT INTO Club VALUES('109', 'Liverpool', 'England', 'Premier League');
+INSERT INTO Club VALUES('110', 'Nottingham Forest F.C.', 'England', 'Premier League');
+INSERT INTO Club VALUES('111', 'Tottenham Hotspur F.C.', 'England', 'Premier League');
+INSERT INTO Club VALUES('112', 'A.S. Roma', 'Italy', 'Serie A');
+INSERT INTO Club VALUES('113', 'Real Betis', 'Spain', 'La Liga');
+
+
+-- create table Game
+CREATE TABLE Game (
+    Game_ID VARCHAR(2) PRIMARY KEY,
+    Referee_ID VARCHAR(2),
+    Game_Date DATE,
+    Opponent VARCHAR(20),
+    Competition VARCHAR(20),
+    Results VARCHAR(20),
+    FOREIGN KEY (Referee_ID) REFERENCES Referees(Referee_ID)
+);
+
+INSERT INTO Game VALUES('G1','R1',TO_DATE('2022-11-22', 'YYYY-MM-DD'),'Saudi Arabia','Group Stage','1-2(Loss)');
+INSERT INTO Game VALUES('G2','R2',TO_DATE('2022-11-26', 'YYYY-MM-DD'),'Mexico','Group Stage','2-0(Win)');
+INSERT INTO Game VALUES('G3','R3',TO_DATE('2022-11-30', 'YYYY-MM-DD'),'Poland','Group Stage','2-0(Win)');
+INSERT INTO Game VALUES('G4','R4',TO_DATE('2022-12-03', 'YYYY-MM-DD'),'Australia','Round of 16','2-1(Win)');
+INSERT INTO Game VALUES('G5','R5',TO_DATE('2022-12-09', 'YYYY-MM-DD'),'Netherlands','Quarter Finals','2(3) - 2(4)(Win)');
+INSERT INTO Game VALUES('G6','R2',TO_DATE('2022-12-13', 'YYYY-MM-DD'),'Croatia','Semi-Finals','3-0(Win)');
+INSERT INTO Game VALUES('G7','R4',TO_DATE('2022-12-18', 'YYYY-MM-DD'),'France','Final','3(4) - 3(2)(Win)');
+
+
+-- create table Game_Time
+CREATE TABLE Game_Time
+(
+    Game_Time_ID VARCHAR(6) PRIMARY KEY,
+    Game_ID VARCHAR(2),
+    Eastern_Standard_Time_EST DATE,
+    Central_Standard_Time_CST DATE,
+    Mountain_Standard_Time_MST DATE,
+    Pacific_Standard_Time_PST DATE,
+    FOREIGN KEY (Game_ID) REFERENCES Game (Game_ID)
+);
+
+
+INSERT INTO Game_Time VALUES('GT101','G1',TO_DATE('05:00:00', 'HH24:MI:SS'),TO_DATE('04:00:00', 'HH24:MI:SS'),TO_DATE('03:00:00', 'HH24:MI:SS'),TO_DATE('02:00:00', 'HH24:MI:SS'));    
+INSERT INTO Game_Time VALUES('GT102','G2',TO_DATE('14:00:00', 'HH24:MI:SS'),TO_DATE('13:00:00', 'HH24:MI:SS'),TO_DATE('12:00:00', 'HH24:MI:SS'),TO_DATE('11:00:00', 'HH24:MI:SS'));   
+INSERT INTO Game_Time VALUES('GT103','G3',TO_DATE('14:00:00', 'HH24:MI:SS'),TO_DATE('13:00:00', 'HH24:MI:SS'),TO_DATE('12:00:00', 'HH24:MI:SS'),TO_DATE('11:00:00', 'HH24:MI:SS'));    
+INSERT INTO Game_Time VALUES('GT104','G4',TO_DATE('08:00:00', 'HH24:MI:SS'),TO_DATE('07:00:00', 'HH24:MI:SS'),TO_DATE('06:00:00', 'HH24:MI:SS'),TO_DATE('05:00:00', 'HH24:MI:SS'));   
+INSERT INTO Game_Time VALUES('GT105','G5',TO_DATE('14:00:00', 'HH24:MI:SS'),TO_DATE('13:00:00', 'HH24:MI:SS'),TO_DATE('12:00:00', 'HH24:MI:SS'),TO_DATE('11:00:00', 'HH24:MI:SS'));   
+INSERT INTO Game_Time VALUES('GT106','G6',TO_DATE('14:00:00', 'HH24:MI:SS'),TO_DATE('13:00:00', 'HH24:MI:SS'),TO_DATE('12:00:00', 'HH24:MI:SS'),TO_DATE('11:00:00', 'HH24:MI:SS'));   
+INSERT INTO Game_Time VALUES('GT107','G7',TO_DATE('10:00:00', 'HH24:MI:SS'),TO_DATE('09:00:00', 'HH24:MI:SS'),TO_DATE('08:00:00', 'HH24:MI:SS'),TO_DATE('07:00:00', 'HH24:MI:SS'));
+
+
+
+
+
+-- create table Player
+CREATE TABLE Player (
+    Player_ID VARCHAR(3) PRIMARY KEY,
+    First_Name VARCHAR(20),
+    Last_Name VARCHAR(20),
+    Age INT,
+    Position VARCHAR(15),
+    Club_ID VARCHAR(3),
+    Salary_USD INT,
+    FOREIGN KEY (Club_ID) REFERENCES Club(Club_ID)
+);
+
+INSERT INTO Player VALUES('A10','Lionel','Messi',34,'Forward','101',20400000);
+INSERT INTO Player VALUES('A11','Sergio','Aguero',33,'Forward','102',11970000);
+insert into Player values('A12','Nicolas','Otamendi',33,'Midfielder','103',11970000);						
+insert into Player values('A13','Angel','Di Maria',33,'Midfielder','103',7690000);						
+insert into Player values('A14','Nahuel','Molina',23,'Defender','107',5207760);						
+insert into Player values('A15','Emiliano','Martinez',29,'Goalkeeper','104',8124105);						
+insert into Player values('A16','Enzo','Fernandez',26,'Midfielder','108',16784176);						
+insert into Player values('A17','Julian','Alvarez',21,'Forward','107',5641740);						
+insert into Player values('A18','Marcos','Acuna',29,'Midfielder','105',3030000);						
+insert into Player values('A19','Alexis','Mac Allister',24,'Midfielder','109',8462610);						
+insert into Player values('A20','Gonzalo','Montiel',26,'Defender','110',1490617);						
+insert into Player values('A21','Cristian','Romero',25,'Defender','111',9308871);						
+insert into Player values('A22','Lisandro','Martinez',25,'Defender','107',6770088);						
+insert into Player values('A23','Leandro','Paredes',29,'Midfielder','112',4339800);			
+insert into Player values('A24','German','Pezzella',32,'Defender','113',3679815);	
+commit;
+
+
+
+-- create table Player Stats
+CREATE TABLE Player_Stats (
+    Player_ID VARCHAR(3) PRIMARY KEY,
+    Goals_Scored INT,
+    Assists INT,
+    Yellow_Cards INT,
+    Red_Cards INT
+);
+
+INSERT INTO Player_Stats VALUES('A10',7,3,1,0);
+INSERT INTO Player_Stats VALUES('A11',3,0,2,0);
+insert into Player_Stats values('A12',0,1,2,0);				
+insert into Player_Stats values('A13',1,1,0,0);				
+insert into Player_Stats values('A14',1,1,0,0);				
+insert into Player_Stats values('A15',0,0,1,0);				
+insert into Player_Stats values('A16',1,1,1,0);				
+insert into Player_Stats values('A17',4,0,0,0);				
+insert into Player_Stats values('A18',0,0,3,0);				
+insert into Player_Stats values('A19',1,1,0,0);				
+insert into Player_Stats values('A20',0,0,3,0);				
+insert into Player_Stats values('A21',0,0,2,0);				
+insert into Player_Stats values('A22',0,0,1,0);				
+insert into Player_Stats values('A23',0,0,2,0);				
+insert into Player_Stats values('A24',0,0,1,0);				
+commit;
+
+-- create table Player History
+CREATE TABLE Player_History (
+    History_ID VARCHAR(3),
+    Player_ID VARCHAR(3),
+    Start_Date DATE,
+    End_Date DATE, 
+    PRIMARY KEY (History_ID),
+    FOREIGN KEY (Player_ID) REFERENCES Player (Player_ID)
+);
+
+INSERT INTO Player_History VALUES('H1','A10',TO_DATE('2005-08-17','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H2','A11',TO_DATE('2006-09-03','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H3','A12',TO_DATE('2009-05-20','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H4','A13',TO_DATE('2008-09-06','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H5','A14',TO_DATE('2021-03-06','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H6','A15',TO_DATE('2021-03-06','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H7','A16',TO_DATE('2022-09-24','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H8','A17',TO_DATE('2021-03-06','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H9','A18',TO_DATE('2016-11-15','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H10','A19',TO_DATE('2016-02-27','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H11','A20',TO_DATE('2019-03-22','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H12','A21',TO_DATE('2021-03-06','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H13','A22',TO_DATE('2019-03-21','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H14','A23',TO_DATE('2017-06-16','YYYY-MM-DD'), NULL);
+INSERT INTO Player_History VALUES('H15','A24',TO_DATE('2011-12-07','YYYY-MM-DD'), NULL);
+
+-- create table Game Location
+CREATE TABLE Game_Location (
+    Game_Location_ID VARCHAR(3),
+    Game_ID VARCHAR(3),
+    Opponent VARCHAR(15),
+    Location VARCHAR(22),
+    PRIMARY KEY (Game_Location_ID),
+    FOREIGN KEY (Game_ID) REFERENCES Game(Game_ID)
+);
+
+INSERT INTO Game_Location VALUES('GL1','G1','Saudi Arabia','Lusail Iconic Stadium');
+INSERT INTO Game_Location VALUES('GL2','G2','Mexico','Lusail Iconic Stadium');
+INSERT INTO Game_Location VALUES('GL3','G3','Poland','Stadium 974');
+INSERT INTO Game_Location VALUES('GL4','G4','Australia','Ahmad bin Ali Stadium');
+INSERT INTO Game_Location VALUES('GL5','G5','Netherlands','Lusail Iconic Stadium');
+INSERT INTO Game_Location VALUES('GL6','G6','Croatia','Lusail Iconic Stadium');
+INSERT INTO Game_Location VALUES('GL7','G7','France','Lusail Iconic Stadium');
+
+
+-- create table Attendance
+create table Attendance
+(Attendance_ID VARCHAR(4), Game_ID VARCHAR(3), Stadium_Name VARCHAR(21), Stadium_Capacity INT, Stadium_Attendance INT, Television_Coverage VARCHAR(3),
+PRIMARY KEY (Attendance_ID),
+FOREIGN KEY (Game_ID) REFERENCES Game(Game_ID));
+
+insert into Attendance values('T101','G1','Lusail Iconic Stadium',88966,88012,'FS1');	
+insert into Attendance values('T102','G2','Lusail Iconic Stadium',88966,88966,'FS1');	
+insert into Attendance values('T103','G3','Stadium 974','44089',44089,'FOX');	
+insert into Attendance values('T104','G4','Ahmad bin Ali Stadium',45032,45032,'FOX');	
+insert into Attendance values('T105','G5','Lusail Iconic Stadium',88235,88235,'FOX');	
+insert into Attendance values('T106','G6','Lusail Iconic Stadium',88966,88966,'FOX');	
+insert into Attendance values('T107','G7','Lusail Iconic Stadium',88966,88966,'FOX');	
+commit;
+
+
+
+
+-- create table Possession_Time
+CREATE TABLE Possession_Time (
+    Possession_ID VARCHAR(5),
+    Game_ID VARCHAR(5),
+    Possesion_Percentage NUMBER(5, 2), 
+    Opponent_Possesion_Percentage NUMBER(5, 2),
+    Formation VARCHAR(12),
+    Opponent_Formation VARCHAR(12),
+    PRIMARY KEY (Possession_ID),
+    FOREIGN KEY (Game_ID) REFERENCES Game(Game_ID)
+);
+
+-- Insert statements
+INSERT INTO Possession_Time VALUES('P101', 'G1', 69.10, 30.90, '4-4-2', '4-1-4-1');
+INSERT INTO Possession_Time VALUES('P102', 'G2', 58.50, 41.50, '4-4-2', '5-3-2');
+INSERT INTO Possession_Time VALUES('P103', 'G3', 73.30, 26.70, '4-4-2', '4-3-3');
+INSERT INTO Possession_Time VALUES('P104', 'G4', 60.70, 39.30, '4-3-3', '4-4-2');
+INSERT INTO Possession_Time VALUES('P105', 'G5', 51.90, 48.10, '5-3-2', '3-4-1-2');
+INSERT INTO Possession_Time VALUES('P106', 'G6', 39.20, 60.80, '4-4-2', '4-3-3');
+INSERT INTO Possession_Time VALUES('P107', 'G7', 54.00, 46.00, '4-3-3', '4-2-3-1');
+
+COMMIT;
+
+-- create table PlayerStats_PerMatch
+CREATE TABLE PlayerStats_PerMatch (
+    Game_ID VARCHAR(3),
+    Player_ID VARCHAR(3),
+    GoalsThisGame INT,
+    AssistsThisMatch INT,
+    Yellow_Cards INT,
+    Red_Cards INT, 
+    PRIMARY KEY (Game_ID, Player_ID),
+    FOREIGN KEY (Player_ID) REFERENCES Player(Player_ID)
+);
+
+
+insert into PlayerStats_PerMatch values('G1','A10',1,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A12',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A13',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A14',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A15',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A16',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A17',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A18',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A19',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A20',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A21',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A22',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A23',0,0,0,0);
+insert into PlayerStats_PerMatch values('G1','A24',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A10',1,1,0,0);
+insert into PlayerStats_PerMatch values('G2','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A12',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A13',0,1,0,0);
+insert into PlayerStats_PerMatch values('G2','A14',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A15',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A16',1,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A17',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A18',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A19',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A20',0,0,1,0);
+insert into PlayerStats_PerMatch values('G2','A21',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A22',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A23',0,0,0,0);
+insert into PlayerStats_PerMatch values('G2','A24',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A10',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A12',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A13',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A14',0,1,0,0);
+insert into PlayerStats_PerMatch values('G3','A15',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A16',0,1,0,0);
+insert into PlayerStats_PerMatch values('G3','A17',1,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A18',0,0,1,0);
+insert into PlayerStats_PerMatch values('G3','A19',1,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A20',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A21',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A22',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A23',0,0,0,0);
+insert into PlayerStats_PerMatch values('G3','A24',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A10',1,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A12',0,1,0,0);
+insert into PlayerStats_PerMatch values('G4','A13',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A14',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A15',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A16',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A17',1,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A18',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A19',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A20',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A21',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A22',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A23',0,0,0,0);
+insert into PlayerStats_PerMatch values('G4','A24',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A10',1,1,1,0);
+insert into PlayerStats_PerMatch values('G5','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A12',0,0,1,0);
+insert into PlayerStats_PerMatch values('G5','A13',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A14',1,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A15',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A16',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A17',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A18',0,0,1,0);
+insert into PlayerStats_PerMatch values('G5','A19',0,0,0,0);
+insert into PlayerStats_PerMatch values('G5','A20',0,0,1,0);
+insert into PlayerStats_PerMatch values('G5','A21',0,0,1,0);
+insert into PlayerStats_PerMatch values('G5','A22',0,0,1,0);
+insert into PlayerStats_PerMatch values('G5','A23',0,0,1,0);
+insert into PlayerStats_PerMatch values('G5','A24',0,0,1,0);
+insert into PlayerStats_PerMatch values('G6','A10',1,1,0,0);
+insert into PlayerStats_PerMatch values('G6','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A12',0,0,1,0);
+insert into PlayerStats_PerMatch values('G6','A13',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A14',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A15',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A16',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A17',2,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A18',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A19',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A20',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A21',0,0,1,0);
+insert into PlayerStats_PerMatch values('G6','A22',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A23',0,0,0,0);
+insert into PlayerStats_PerMatch values('G6','A24',0,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A10',2,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A11',0,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A12',0,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A13',1,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A14',2,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A15',0,0,1,0);
+insert into PlayerStats_PerMatch values('G7','A16',0,0,1,0);
+insert into PlayerStats_PerMatch values('G7','A17',0,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A18',0,0,1,0);
+insert into PlayerStats_PerMatch values('G7','A19',1,1,0,0);
+insert into PlayerStats_PerMatch values('G7','A20',0,0,1,0);
+insert into PlayerStats_PerMatch values('G7','A21',0,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A22',0,0,0,0);
+insert into PlayerStats_PerMatch values('G7','A23',0,0,1,0);
+insert into PlayerStats_PerMatch values('G7','A24',0,0,0,0);
+commit; 
+
+
+
